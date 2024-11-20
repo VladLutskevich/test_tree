@@ -1,0 +1,31 @@
+<mat-tree #tree [dataSource]="dataSource()" [childrenAccessor]="childrenAccessor">
+  <mat-tree-node [ngClass]="{ 'selected': selectedNodeId() === node.id }" (click)="selectNode(node.id)" *matTreeNodeDef="let node;" matTreeNodePadding matTreeNodeToggle
+                 [cdkTreeNodeTypeaheadLabel]="node.name">
+
+    @if(hasChild(node)){
+      <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{tree.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+    } @else{
+      <button mat-icon-button disabled></button>
+    }
+
+    {{node.name}}
+
+    @if(selectedNodeId() === node.id){
+      <button (click)="addNode($event, node.id)" mat-icon-button>
+        <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+      </button>
+      @if(node.name !== 'Root'){
+        <button (click)="renameNode($event, node.id, node.name)" mat-icon-button>
+          <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>
+        </button>
+        <button (click)="deleteNode($event, node.id, node.name)" mat-icon-button>
+          <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+        </button>
+      }
+    }
+  </mat-tree-node>
+</mat-tree>
